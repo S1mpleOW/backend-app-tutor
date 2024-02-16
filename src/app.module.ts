@@ -1,27 +1,28 @@
-import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
-import { FilesModule } from './files/files.module';
-import { AuthModule } from './auth/auth.module';
-import databaseConfig from './database/config/database.config';
-import authConfig from './auth/config/auth.config';
 import appConfig from './config/app.config';
-import mailConfig from './mail/config/mail.config';
+import authConfig from './auth/config/auth.config';
+import databaseConfig from './database/config/database.config';
 import fileConfig from './files/config/file.config';
+import mailConfig from './mail/config/mail.config';
 import path from 'path';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { I18nModule } from 'nestjs-i18n/dist/i18n.module';
-import { HeaderResolver } from 'nestjs-i18n';
-import { TypeOrmConfigService } from './database/typeorm-config.service';
-import { MailModule } from './mail/mail.module';
-import { HomeModule } from './home/home.module';
-import { DataSource, DataSourceOptions } from 'typeorm';
 import { AllConfigType } from './config/config.type';
-import { SessionModule } from './session/session.module';
-import { MailerModule } from './mailer/mailer.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { MongooseConfigService } from './database/mongoose-config.service';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseConfig } from './database/config/database-config.type';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { FilesModule } from './files/files.module';
+import { HeaderResolver } from 'nestjs-i18n';
+import { HomeModule } from './home/home.module';
+import { I18nModule } from 'nestjs-i18n/dist/i18n.module';
+import { LearnersModule } from './learners/learners.module';
+import { MailerModule } from './mailer/mailer.module';
+import { MailModule } from './mail/mail.module';
+import { Module } from '@nestjs/common';
+import { MongooseConfigService } from './database/mongoose-config.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { SessionModule } from './session/session.module';
+import { TypeOrmConfigService } from './database/typeorm-config.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { DatabaseConfig } from './database/config/database-config.type';
       imports: [ConfigModule],
       inject: [ConfigService],
     }),
+    LearnersModule,
     UsersModule,
     FilesModule,
     AuthModule,
