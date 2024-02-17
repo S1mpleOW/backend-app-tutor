@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { I18nContext } from 'nestjs-i18n';
 import { MailData } from './interfaces/mail-data.interface';
@@ -6,12 +6,15 @@ import { AllConfigType } from 'src/config/config.type';
 import { MaybeType } from '../utils/types/maybe.type';
 import { MailerService } from '../mailer/mailer.service';
 import path from 'path';
+import { SendEmailDto } from './dto/send-email-dto';
+import { MailRepository } from './infrastructure/persistence/mail.repository';
 
 @Injectable()
 export class MailService {
   constructor(
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService<AllConfigType>,
+    private readonly mailRepository: MailRepository,
   ) {}
 
   async userSignUp(mailData: MailData<{ hash: string }>): Promise<void> {
@@ -113,5 +116,61 @@ export class MailService {
         text4,
       },
     });
+  }
+
+  async saveEmail(mailData: SendEmailDto): Promise<void> {
+    const from = mailData.sender;
+    const recipients = mailData.recipients;
+    const subject = mailData.subject;
+    const content = mailData.body;
+    await this.mailRepository.create({
+      sender: from,
+      recipients,
+      subject,
+      body: content,
+    });
+  }
+
+  async sendEmail(mailData: SendEmailDto): Promise<void> {
+    const from = mailData.sender;
+    const recipients = mailData.recipients;
+    if (recipients.includes(from)) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          error: 'You cannot send an email to yourself',
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    const subject = mailData.subject;
+    const content = mailData.body;
+    const sendToRecipients = recipients.map((recipient) => {
+      return this.mailerService.sendMail({
+        to: recipient,
+        subject,
+        text: content,
+        templatePath: path.join(
+          this.configService.getOrThrow('app.workingDirectory', {
+            infer: true,
+          }),
+          'src',
+          'mail',
+          'mail-templates',
+          'send-email-to-learner.hbs',
+        ),
+        context: {
+          title: subject,
+          content,
+          app_name: this.configService.get('app.name', {
+            infer: true,
+          }),
+        },
+        from,
+      });
+    });
+    await this.saveEmail(mailData);
+
+    await Promise.all(sendToRecipients);
   }
 }

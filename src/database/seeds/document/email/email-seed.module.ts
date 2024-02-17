@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   EmailSchema,
   EmailSchemaClass,
-} from 'src/learners/infrastructure/persistence/document/entities/email.schema';
+} from 'src/mail/infrastructure/persistence/document/entities/email.schema';
 import { EmailSeedService } from './email-seed.service';
 
 @Module({

@@ -1,5 +1,7 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { SendEmailDto } from '../mail/dto/send-email-dto';
+import { LearnersService } from './learners.service';
 
 @ApiTags('Learners')
 @Controller({
@@ -7,10 +9,11 @@ import { ApiTags } from '@nestjs/swagger';
   version: '1',
 })
 export class LearnersController {
-  constructor() {}
+  constructor(private readonly learnerService: LearnersService) {}
 
   @Post('send-email')
-  async sendEmail() {
-    return 'Email sent successfully!';
+  @HttpCode(HttpStatus.OK)
+  sendEmail(@Body() sendEmailDto: SendEmailDto) {
+    return this.learnerService.sendEmail(sendEmailDto);
   }
 }

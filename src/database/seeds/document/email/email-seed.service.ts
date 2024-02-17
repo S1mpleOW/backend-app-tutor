@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { EmailSchemaClass } from 'src/learners/infrastructure/persistence/document/entities/email.schema';
+import { EmailSchemaClass } from 'src/mail/infrastructure/persistence/document/entities/email.schema';
 
 @Injectable()
 export class EmailSeedService {
