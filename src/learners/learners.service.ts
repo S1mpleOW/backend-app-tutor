@@ -5,6 +5,7 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
+import { QueryMailDto } from 'src/mail/dto/query-email.dto';
 @Injectable()
 export class LearnersService {
   constructor(
@@ -124,5 +125,9 @@ export class LearnersService {
     } finally {
       await session.endSession();
     }
+  }
+
+  getEmails(query: QueryMailDto) {
+    return this.mailService.findManyEmails(query);
   }
 }

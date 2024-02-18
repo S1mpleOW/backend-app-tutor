@@ -6,8 +6,10 @@ import { AllConfigType } from 'src/config/config.type';
 import { MaybeType } from '../utils/types/maybe.type';
 import { MailerService } from '../mailer/mailer.service';
 import path from 'path';
-import { SendEmailDto } from './dto/send-email-dto';
+import { SendEmailDto } from './dto/send-email.dto';
 import { MailRepository } from './infrastructure/persistence/mail.repository';
+import { QueryMailDto } from './dto/query-email.dto';
+import { infinityPagination } from 'src/utils/infinity-pagination';
 
 @Injectable()
 export class MailService {
@@ -205,9 +207,29 @@ export class MailService {
     await this.mailRepository.update(_id, data);
     return data;
   }
+
   findEmailById(_id: string) {
     return this.mailRepository.findOne({
       id: _id,
     });
+  }
+
+  async findManyEmails(query: QueryMailDto) {
+    const page = query?.page ?? 1;
+    let limit = query?.limit ?? 10;
+    if (limit > 50) {
+      limit = 50;
+    }
+
+    return infinityPagination(
+      await this.mailRepository.findManyWithPagination({
+        filterOptions: query?.filters,
+        paginationOptions: {
+          page,
+          limit,
+        },
+      }),
+      { page, limit },
+    );
   }
 }

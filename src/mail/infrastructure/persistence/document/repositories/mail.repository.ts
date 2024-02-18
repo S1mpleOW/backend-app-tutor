@@ -7,6 +7,8 @@ import { Email } from 'src/mail/domain/email';
 import { MailMapper } from '../mappers/mail.mapper';
 import { EntityCondition } from 'src/utils/types/entity-condition.type';
 import { NullableType } from 'src/utils/types/nullable.type';
+import { IPaginationOptions } from 'src/utils/types/pagination-options';
+import { FilterMailDto } from 'src/mail/dto/query-email.dto';
 
 @Injectable()
 export class MailDocumentRepository implements MailRepository {
@@ -45,5 +47,19 @@ export class MailDocumentRepository implements MailRepository {
     );
 
     return mailObject ? MailMapper.toDomain(mailObject) : null;
+  }
+
+  async findManyWithPagination({
+    filterOptions,
+    paginationOptions,
+  }: {
+    filterOptions: FilterMailDto;
+    paginationOptions: IPaginationOptions;
+  }): Promise<Email[]> {
+    const emails = await this.mailModel
+      .find(filterOptions)
+      .skip((paginationOptions.page - 1) * paginationOptions.limit)
+      .limit(paginationOptions.limit);
+    return emails.map(MailMapper.toDomain);
   }
 }
