@@ -1,7 +1,14 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { SendEmailDto } from '../mail/dto/send-email-dto';
 import { LearnersService } from './learners.service';
+import { SendEmailFromTutor } from './domain/dto/send-email-from-tutor.dto';
 
 @ApiTags('Learners')
 @Controller({
@@ -13,7 +20,13 @@ export class LearnersController {
 
   @Post('send-email')
   @HttpCode(HttpStatus.OK)
-  sendEmail(@Body() sendEmailDto: SendEmailDto) {
-    return this.learnerService.sendEmail(sendEmailDto);
+  sendEmail(@Body() sendEmailDto: SendEmailFromTutor) {
+    return this.learnerService.sendEmailFromTutor(sendEmailDto);
+  }
+
+  @Post('cancel-send-email-monthly/:id')
+  @HttpCode(HttpStatus.OK)
+  cancelSendEmailMonthly(@Param('id') id: string) {
+    return this.learnerService.cancelSendEmailMonthly(id);
   }
 }

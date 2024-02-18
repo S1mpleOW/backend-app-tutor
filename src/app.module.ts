@@ -23,6 +23,7 @@ import { SessionModule } from './session/session.module';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { UsersModule } from './users/users.module';
       imports: [ConfigModule],
       inject: [ConfigService],
     }),
+    ScheduleModule.forRoot(),
     LearnersModule,
     UsersModule,
     FilesModule,

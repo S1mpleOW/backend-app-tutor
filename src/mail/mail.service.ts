@@ -123,11 +123,15 @@ export class MailService {
     const recipients = mailData.recipients;
     const subject = mailData.subject;
     const content = mailData.body;
+    const isSendMonthly = mailData.sendMonthly;
+    const sendMonthlyAt = mailData.sendMonthlyAt || null;
     await this.mailRepository.create({
       sender: from,
       recipients,
       subject,
       body: content,
+      isSendMonthly,
+      sendMonthlyAt,
     });
   }
 
@@ -172,5 +176,38 @@ export class MailService {
     await this.saveEmail(mailData);
 
     await Promise.all(sendToRecipients);
+  }
+
+  async cancelSendEmailMonthly(_id: string) {
+    const data = await this.mailRepository.findOne({
+      id: _id,
+    });
+    if (!data?.id) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Cannot find email to cancel',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (!data?.subject || !data?.sendMonthlyAt || !data?.isSendMonthly) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'This email is not scheduled to send monthly',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    data.isSendMonthly = false;
+    await this.mailRepository.update(_id, data);
+    return data;
+  }
+  findEmailById(_id: string) {
+    return this.mailRepository.findOne({
+      id: _id,
+    });
   }
 }

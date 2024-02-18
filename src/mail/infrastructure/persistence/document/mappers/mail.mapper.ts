@@ -9,6 +9,8 @@ export class MailMapper {
     email.recipients = [...raw.recipients];
     email.subject = raw.subject;
     email.body = raw.body;
+    email.isSendMonthly = raw.isSendMonthly;
+    email.sendMonthlyAt = raw.sendMonthlyAt ? raw.sendMonthlyAt : undefined;
     email.createdAt = raw.createdAt;
     return email;
   }
@@ -22,7 +24,9 @@ export class MailMapper {
     emailEntity.recipients = [...email.recipients];
     emailEntity.subject = email.subject;
     emailEntity.body = email.body;
-    emailEntity.createdAt = email.createdAt;
+    emailEntity.createdAt = new Date();
+    emailEntity.isSendMonthly = email.isSendMonthly === true ? true : false;
+    emailEntity.sendMonthlyAt = email.sendMonthlyAt;
     return emailEntity;
   }
 }

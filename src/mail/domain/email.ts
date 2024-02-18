@@ -4,5 +4,7 @@ export class Email {
   recipients: string[];
   subject: string;
   body: string;
+  isSendMonthly: boolean;
   createdAt: Date;
+  sendMonthlyAt?: Date;
 }

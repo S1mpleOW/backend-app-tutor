@@ -1,17 +1,18 @@
-import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   ArrayMinSize,
   IsArray,
   IsBoolean,
-  IsDateString,
   IsEmail,
+  IsISO8601,
   IsNotEmpty,
+  IsOptional,
   MinLength,
 } from 'class-validator';
 import { lowerCaseTransformer } from 'src/utils/transformers/lower-case.transformer';
 
-export class SendEmailDto {
+export class SendEmailFromTutor {
   @ApiProperty({ example: 'test1@example.com' })
   @Transform(lowerCaseTransformer)
   @IsNotEmpty()
@@ -35,13 +36,12 @@ export class SendEmailDto {
   @MinLength(10)
   body: string;
 
-  @ApiProperty({
-    default: false,
-  })
+  @ApiProperty()
   @IsBoolean()
   sendMonthly: boolean;
 
   @ApiProperty()
-  @IsDateString()
+  @IsISO8601()
+  @IsOptional()
   sendMonthlyAt: Date;
 }

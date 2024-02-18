@@ -35,6 +35,17 @@ export class EmailSchemaClass extends EntityDocumentHelper {
     default: now,
   })
   createdAt: Date;
+
+  @Prop({
+    type: Boolean,
+    default: false,
+  })
+  isSendMonthly: boolean;
+
+  @Prop({
+    type: Date,
+  })
+  sendMonthlyAt?: Date;
 }
 
 export type EmailSchemaDocument = HydratedDocument<EmailSchemaClass>;

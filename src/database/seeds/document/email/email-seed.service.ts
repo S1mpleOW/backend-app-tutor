@@ -21,6 +21,8 @@ export class EmailSeedService {
         recipients: ['dungdqch2@gmail.com'],
         subject: 'Test',
         body: 'Test',
+        isSendMonthly: false,
+        sendMonthlyAt: null,
       });
       await data.save();
     }
