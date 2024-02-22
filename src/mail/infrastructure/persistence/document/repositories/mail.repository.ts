@@ -62,4 +62,11 @@ export class MailDocumentRepository implements MailRepository {
       .limit(paginationOptions.limit);
     return emails.map(MailMapper.toDomain);
   }
+
+  async findMany({ filterOptions }: { filterOptions: any }): Promise<Email[]> {
+    const emails = await this.mailModel.find(filterOptions).sort({
+      createdAt: -1,
+    });
+    return emails.map(MailMapper.toDomain);
+  }
 }

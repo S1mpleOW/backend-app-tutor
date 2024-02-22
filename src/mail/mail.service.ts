@@ -9,7 +9,7 @@ import path from 'path';
 import { SendEmailDto } from './dto/send-email.dto';
 import { MailRepository } from './infrastructure/persistence/mail.repository';
 import { QueryMailDto } from './dto/query-email.dto';
-import { infinityPagination } from 'src/utils/infinity-pagination';
+// import { infinityPagination } from 'src/utils/infinity-pagination';
 
 @Injectable()
 export class MailService {
@@ -215,21 +215,8 @@ export class MailService {
   }
 
   async findManyEmails(query: QueryMailDto) {
-    const page = query?.page ?? 1;
-    let limit = query?.limit ?? 10;
-    if (limit > 50) {
-      limit = 50;
-    }
-
-    return infinityPagination(
-      await this.mailRepository.findManyWithPagination({
-        filterOptions: query?.filters,
-        paginationOptions: {
-          page,
-          limit,
-        },
-      }),
-      { page, limit },
-    );
+    return await this.mailRepository.findMany({
+      filterOptions: query?.filters,
+    });
   }
 }

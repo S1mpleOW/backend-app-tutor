@@ -21,4 +21,10 @@ export abstract class MailRepository {
     filterOptions: any;
     paginationOptions: IPaginationOptions;
   }): Promise<Email[]>;
+
+  abstract findMany({
+    filterOptions,
+  }: {
+    filterOptions: any;
+  }): Promise<Email[]>;
 }

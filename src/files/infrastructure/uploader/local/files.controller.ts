@@ -8,13 +8,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiConsumes,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
 import { FilesLocalService } from './files.service';
 
 @ApiTags('Files')
@@ -25,7 +19,6 @@ import { FilesLocalService } from './files.service';
 export class FilesLocalController {
   constructor(private readonly filesService: FilesLocalService) {}
 
-  @ApiBearerAuth()
   @Post('upload')
   @ApiConsumes('multipart/form-data')
   @ApiBody({
