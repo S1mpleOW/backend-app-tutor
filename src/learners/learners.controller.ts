@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -27,7 +28,7 @@ export class LearnersController {
     return this.learnerService.sendEmailFromTutor(sendEmailDto);
   }
 
-  @Post('cancel-send-email-monthly/:id')
+  @Patch('emails/:id/cancel-send-email-monthly')
   @HttpCode(HttpStatus.OK)
   cancelSendEmailMonthly(@Param('id') id: string) {
     return this.learnerService.cancelSendEmailMonthly(id);
@@ -37,5 +38,11 @@ export class LearnersController {
   @HttpCode(HttpStatus.OK)
   async getEmails(@Query() query: QueryMailDto) {
     return this.learnerService.getEmails(query);
+  }
+
+  @Get('emails/:id')
+  @HttpCode(HttpStatus.OK)
+  async getEmailById(@Param('id') id: string) {
+    return this.learnerService.getEmailById(id);
   }
 }

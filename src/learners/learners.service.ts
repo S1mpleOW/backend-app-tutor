@@ -130,4 +130,8 @@ export class LearnersService {
   getEmails(query: QueryMailDto) {
     return this.mailService.findManyEmails(query);
   }
+
+  getEmailById(id: string) {
+    return this.mailService.findEmailById(id);
+  }
 }
