@@ -13,6 +13,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { LearnersService } from './learners.service';
 import { SendEmailFromTutor } from './domain/dto/send-email-from-tutor.dto';
 import { QueryMailDto } from 'src/mail/dto/query-email.dto';
+import { UpdateEmailFromTutor } from './domain/dto/update-email-from-tutor.dto';
 
 @ApiTags('Learners')
 @Controller({
@@ -32,6 +33,21 @@ export class LearnersController {
   @HttpCode(HttpStatus.OK)
   cancelSendEmailMonthly(@Param('id') id: string) {
     return this.learnerService.cancelSendEmailMonthly(id);
+  }
+
+  @Patch('emails/:id/cancel-send-email-scheduled')
+  @HttpCode(HttpStatus.OK)
+  cancelSendEmailScheduled(@Param('id') id: string) {
+    return this.learnerService.cancelSendEmailScheduled(id);
+  }
+
+  @Patch('emails/:id/')
+  @HttpCode(HttpStatus.OK)
+  updateEmail(
+    @Param('id') id: string,
+    @Body() emailUpdateDto: UpdateEmailFromTutor,
+  ) {
+    return this.learnerService.updateEmail(id, emailUpdateDto);
   }
 
   @Get('emails')

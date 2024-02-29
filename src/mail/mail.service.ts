@@ -9,6 +9,9 @@ import path from 'path';
 import { SendEmailDto } from './dto/send-email.dto';
 import { MailRepository } from './infrastructure/persistence/mail.repository';
 import { QueryMailDto } from './dto/query-email.dto';
+import { SendEmailOptionsEnum } from 'src/learners/domain/enums/send-email-option.enum';
+import { UpdateEmailDto } from './dto/update-email.dto';
+import { Email } from './domain/email';
 // import { infinityPagination } from 'src/utils/infinity-pagination';
 
 @Injectable()
@@ -120,35 +123,27 @@ export class MailService {
     });
   }
 
-  async saveEmail(mailData: SendEmailDto): Promise<void> {
+  async saveEmail(mailData: SendEmailDto): Promise<Email> {
     const from = mailData.sender;
     const recipients = mailData.recipients;
     const subject = mailData.subject;
     const content = mailData.body;
-    const isSendMonthly = mailData.sendMonthly;
-    const sendMonthlyAt = mailData.sendMonthlyAt || null;
-    await this.mailRepository.create({
+    const sendEmailOption =
+      mailData.sendEmailOption ?? SendEmailOptionsEnum.NONE;
+    const sendAt = mailData.sendAt || null;
+    return await this.mailRepository.create({
       sender: from,
       recipients,
       subject,
       body: content,
-      isSendMonthly,
-      sendMonthlyAt,
+      sendEmailOption,
+      sendAt,
     });
   }
 
   async sendEmail(mailData: SendEmailDto): Promise<void> {
     const from = mailData.sender;
     const recipients = mailData.recipients;
-    if (recipients.includes(from)) {
-      throw new HttpException(
-        {
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          error: 'You cannot send an email to yourself',
-        },
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    }
     const subject = mailData.subject;
     const content = mailData.body;
     const sendToRecipients = recipients.map((recipient) => {
@@ -175,7 +170,6 @@ export class MailService {
         from,
       });
     });
-    await this.saveEmail(mailData);
 
     await Promise.all(sendToRecipients);
   }
@@ -193,8 +187,10 @@ export class MailService {
         HttpStatus.BAD_REQUEST,
       );
     }
+    const isSendMonthly =
+      data?.sendEmailOption === SendEmailOptionsEnum.SEND_MONTHLY;
 
-    if (!data?.subject || !data?.sendMonthlyAt || !data?.isSendMonthly) {
+    if (!data?.subject || !data?.sendAt || !isSendMonthly) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
@@ -203,7 +199,101 @@ export class MailService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    data.isSendMonthly = false;
+
+    data.sendEmailOption = SendEmailOptionsEnum.NONE;
+    await this.mailRepository.update(_id, data);
+    return data;
+  }
+
+  async cancelSendEmailScheduled(_id: string) {
+    const data = await this.mailRepository.findOne({
+      id: _id,
+    });
+    if (!data?.id) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Cannot find email to cancel',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const isSendSchedule =
+      data?.sendEmailOption === SendEmailOptionsEnum.SEND_SCHEDULED;
+    if (!data?.subject || !data?.sendAt || !isSendSchedule) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'This email is not scheduled to send',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    data.sendEmailOption = SendEmailOptionsEnum.NONE;
+    await this.mailRepository.update(_id, data);
+    return data;
+  }
+
+  // Using only for email which is not scheduled
+  async updateEmail(_id: string, emailUpdateDto: UpdateEmailDto) {
+    const data = await this.mailRepository.findOne({
+      id: _id,
+    });
+    if (!data?.id) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Cannot find email to update',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (data?.sendEmailOption === SendEmailOptionsEnum.NONE) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'This email have already sent',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    data.recipients = emailUpdateDto.recipients
+      ? emailUpdateDto.recipients
+      : data.recipients;
+    data.subject = emailUpdateDto.subject
+      ? emailUpdateDto.subject
+      : data.subject;
+    data.body = emailUpdateDto.body ? emailUpdateDto.body : data.body;
+    data.sendAt = emailUpdateDto.sendAt ? emailUpdateDto.sendAt : data.sendAt;
+    await this.mailRepository.update(_id, data);
+    return data;
+  }
+
+  async updateSendEmailMonthlyToNextMonth(_id: string) {
+    const data = await this.mailRepository.findOne({
+      id: _id,
+    });
+    if (!data?.id || !data?.sendAt) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Cannot find email to update',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (data?.sendEmailOption !== SendEmailOptionsEnum.SEND_MONTHLY) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'This email is not scheduled to send monthly',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const oldValue = new Date(data.sendAt);
+    const newValue = new Date(oldValue.setMonth(oldValue.getMonth() + 1));
+    data.sendAt = newValue;
     await this.mailRepository.update(_id, data);
     return data;
   }

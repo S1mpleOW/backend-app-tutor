@@ -3,13 +3,16 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   ArrayMinSize,
   IsArray,
-  IsBoolean,
-  IsDateString,
   IsEmail,
+  IsEnum,
+  IsISO8601,
   IsNotEmpty,
+  IsOptional,
+  MinDate,
   MinLength,
 } from 'class-validator';
 import { lowerCaseTransformer } from 'src/utils/transformers/lower-case.transformer';
+import { SendEmailOptionsEnum } from 'src/learners/domain/enums/send-email-option.enum';
 
 export class SendEmailDto {
   @ApiProperty({ example: 'test1@example.com' })
@@ -36,12 +39,17 @@ export class SendEmailDto {
   body: string;
 
   @ApiProperty({
-    default: false,
+    default: SendEmailOptionsEnum.NONE,
   })
-  @IsBoolean()
-  sendMonthly: boolean;
+  @IsEnum(SendEmailOptionsEnum)
+  sendEmailOption: SendEmailOptionsEnum;
 
-  @ApiProperty()
-  @IsDateString()
-  sendMonthlyAt: Date;
+  @ApiProperty({
+    default: new Date().toISOString(),
+  })
+  @IsOptional()
+  @IsISO8601()
+  @Transform(({ value }) => value && new Date(value))
+  @MinDate(new Date())
+  sendAt: Date;
 }

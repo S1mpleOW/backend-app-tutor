@@ -3,14 +3,15 @@ import { Transform } from 'class-transformer';
 import {
   ArrayMinSize,
   IsArray,
-  IsBoolean,
+  IsDateString,
   IsEmail,
-  IsISO8601,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   MinLength,
 } from 'class-validator';
 import { lowerCaseTransformer } from 'src/utils/transformers/lower-case.transformer';
+import { SendEmailOptionsEnum } from '../enums/send-email-option.enum';
 
 export class SendEmailFromTutor {
   @ApiProperty({ example: 'test1@example.com' })
@@ -36,12 +37,16 @@ export class SendEmailFromTutor {
   @MinLength(10)
   body: string;
 
-  @ApiProperty()
-  @IsBoolean()
-  sendMonthly: boolean;
+  @ApiProperty({
+    default: SendEmailOptionsEnum.NONE,
+  })
+  @IsEnum(SendEmailOptionsEnum)
+  sendEmailOption: SendEmailOptionsEnum;
 
-  @ApiProperty()
-  @IsISO8601()
+  @ApiProperty({
+    default: new Date().toISOString(),
+  })
   @IsOptional()
-  sendMonthlyAt: Date;
+  @IsDateString()
+  sendAt: Date;
 }

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, now } from 'mongoose';
+import { SendEmailOptionsEnum } from 'src/learners/domain/enums/send-email-option.enum';
 import { EntityDocumentHelper } from 'src/utils/document-entity-helper';
 
 @Schema({
@@ -37,15 +38,16 @@ export class EmailSchemaClass extends EntityDocumentHelper {
   createdAt: Date;
 
   @Prop({
-    type: Boolean,
-    default: false,
+    type: String,
+    enum: SendEmailOptionsEnum,
+    default: SendEmailOptionsEnum.NONE,
   })
-  isSendMonthly: boolean;
+  sendEmailOption: SendEmailOptionsEnum;
 
   @Prop({
     type: Date,
   })
-  sendMonthlyAt?: Date;
+  sendAt?: Date;
 }
 
 export type EmailSchemaDocument = HydratedDocument<EmailSchemaClass>;
