@@ -69,7 +69,7 @@
     "rxjs": "7.8.1",
     "source-map-support": "0.5.21",
     "swagger-ui-express": "5.0.0",
-    "typeorm": "0.3.19"
+    "typeorm": "0.3.20"
   },
   "devDependencies": {
     "@nestjs/cli": "10.3.1",
