@@ -1,6 +1,6 @@
 {
-  "projectName": "nestjs-boilerplate",
-  "projectOwner": "brocoders",
+  "projectName": "backend-app-tutor",
+  "projectOwner": "s1mpleow",
   "files": [
     "README.md"
   ],
@@ -9,32 +9,14 @@
   "contributorsPerLine": 7,
   "contributors": [
     {
-      "login": "Shchepotin",
-      "name": "Vladyslav Shchepotin",
-      "avatar_url": "https://avatars.githubusercontent.com/u/6001723?v=4",
-      "profile": "https://github.com/Shchepotin",
+      "login": "S1mpleOW",
+      "name": "S1mpleOW",
+      "avatar_url": "https://avatars.githubusercontent.com/u/87890584?s=400&v=4",
+      "profile": "https://github.com/s1mpleow",
       "contributions": [
         "maintenance",
         "doc",
         "code"
-      ]
-    },
-    {
-      "login": "SergeiLomako",
-      "name": "SergeiLomako",
-      "avatar_url": "https://avatars.githubusercontent.com/u/31205374?v=4",
-      "profile": "https://github.com/SergeiLomako",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "ElenVlass",
-      "name": "Elena Vlasenko",
-      "avatar_url": "https://avatars.githubusercontent.com/u/72293912?v=4",
-      "profile": "https://github.com/ElenVlass",
-      "contributions": [
-        "doc"
       ]
     }
   ]
