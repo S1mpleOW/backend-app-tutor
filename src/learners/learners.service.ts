@@ -241,6 +241,7 @@ export class LearnersService {
       emailUpdateDtoCron.sendAt = updatedEmail.sendAt || new Date();
       emailUpdateDtoCron.sendEmailOption = SendEmailOptionsEnum.SEND_MONTHLY;
       emailUpdateDtoCron.subject = updatedEmail.subject;
+      emailUpdateDtoCron.sender = updatedEmail.sender;
       this.sendEmailScheduleCron(emailUpdateDtoCron, id);
     } else if (isSendScheduled) {
       this.removeTimeoutSendEmailScheduled(
@@ -254,6 +255,7 @@ export class LearnersService {
       emailUpdateDtoTimeout.sendEmailOption =
         SendEmailOptionsEnum.SEND_SCHEDULED;
       emailUpdateDtoTimeout.subject = updatedEmail.subject;
+      emailUpdateDtoTimeout.sender = updatedEmail.sender;
       this.sendEmailScheduleTimeout(emailUpdateDtoTimeout, id);
     }
     return updatedEmail;
