@@ -40,6 +40,8 @@ services:
       dockerfile: document.Dockerfile
     ports:
       - ${APP_PORT}:${APP_PORT}
+    depends_on:
+      - mongo
 
 volumes:
   backendapptutor-mongo-db:
