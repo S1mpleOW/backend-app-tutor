@@ -16,7 +16,7 @@
 1. Clone repository
 
    ```bash
-   git clone --depth 1 git@github.com:S1mpleOW/backend-app-tutor.git my-app
+   git clone --depth 1 [https://github.com/S1mpleOW/backend-app-tutor](https://github.com/S1mpleOW/backend-app-tutor) my-app
    ```
 
 1. Go to folder, and copy `env-example-document` as `.env`.
