@@ -1,4 +1,4 @@
-import { APP_URL, MAIL_HOST, MAIL_PORT } from '../utils/constants';
+import { APP_URL } from '../utils/constants';
 import request from 'supertest';
 describe('Learner Module', () => {
   const app = APP_URL;
