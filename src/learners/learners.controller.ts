@@ -14,6 +14,7 @@ import { LearnersService } from './learners.service';
 import { SendEmailFromTutor } from './domain/dto/send-email-from-tutor.dto';
 import { QueryMailDto } from 'src/mail/dto/query-email.dto';
 import { UpdateEmailFromTutor } from './domain/dto/update-email-from-tutor.dto';
+import { ParamsObjectIdPipe } from 'src/validations/paramsObjectId.pipe';
 
 @ApiTags('Learners')
 @Controller({
@@ -44,7 +45,8 @@ export class LearnersController {
   @Patch('emails/:id/')
   @HttpCode(HttpStatus.OK)
   updateEmail(
-    @Param('id') id: string,
+    @Param('id', ParamsObjectIdPipe)
+    id: string,
     @Body() emailUpdateDto: UpdateEmailFromTutor,
   ) {
     return this.learnerService.updateEmail(id, emailUpdateDto);
@@ -58,7 +60,10 @@ export class LearnersController {
 
   @Get('emails/:id')
   @HttpCode(HttpStatus.OK)
-  async getEmailById(@Param('id') id: string) {
+  async getEmailById(
+    @Param('id', ParamsObjectIdPipe)
+    id: string,
+  ) {
     return this.learnerService.getEmailById(id);
   }
 }
