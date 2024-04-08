@@ -1,5 +1,7 @@
 pipeline {
-  agent 'jenkins-agent1'
+  agent {
+    label: 'jenkins-agent1'
+  }
 
   environment {
     APP_NAME = 'backend-app-tutor'
