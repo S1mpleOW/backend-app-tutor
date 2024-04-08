@@ -8,6 +8,8 @@ pipeline {
     APP_PORT = 8000
     SHOW_NODE_VERSION = 'node --version; npm --version'
     RUN_WITH_SYSTEMD = '/bin/bash systemd_jenkins.sh'
+    USE_NODE_16 = 'echo v16.20.2 > .nvmrc '
+    USE_NODE_18 = 'echo v18.0.0 > .nvmrc '
   }
 
   stages {
@@ -16,7 +18,8 @@ pipeline {
         script {
           echo "Deploying ${APP_NAME} on port ${APP_PORT}"
           sh(script: """ ${SHOW_NODE_VERSION} """, label: 'show node version')
-          sh(script: """ ${RUN_WITH_SYSTEMD} """, label: 'run with systemd')
+          sh(script: """ ${USE_NODE_16} """, label: 'use node 16')
+          sh(script: """ ${RUN_WITH_SYSTEMD}  """, label: 'run with systemd')
         }
       }
     }
