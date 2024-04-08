@@ -11,10 +11,11 @@ pipeline {
     USE_NODE_18 = 'echo v18.0.0 > .nvmrc '
     CHANGE_OWNER = 'chmod 777 *'
     SHOW_STATE = 'whoami; ls -la'
+    SHOW_HOST_RUNNING = 'echo "Application are running on 0.0.0.0:${APP_PORT}"'
   }
 
   stages {
-    stage('Deploy with node 16 in docker') {
+    stage('Deploy with node 16 in systemd') {
       steps {
         script {
           echo "Deploying ${APP_NAME} on port ${APP_PORT}"
@@ -22,9 +23,9 @@ pipeline {
           sh(script: """ ${CHANGE_OWNER} """, label: 'change owner')
           sh(script: """ ${SHOW_STATE} """, label: 'show state')
           sh(script: """ ${RUN_WITH_SYSTEMD}  """, label: 'run with systemd')
+          sh(script: """  ${SHOW_HOST_RUNNING} """, label: 'show log')
         }
       }
     }
   }
-
 }
