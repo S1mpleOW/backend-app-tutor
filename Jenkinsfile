@@ -10,6 +10,7 @@ pipeline {
     USE_NODE_16 = 'echo v16.20.2 > .nvmrc '
     USE_NODE_18 = 'echo v18.0.0 > .nvmrc '
     CHANGE_OWNER = 'chmod 777 *'
+    SHOW_STATE = 'whoami; ls -la'
   }
 
   stages {
@@ -19,6 +20,7 @@ pipeline {
           echo "Deploying ${APP_NAME} on port ${APP_PORT}"
           sh(script: """ ${USE_NODE_16} """, label: 'use node 16')
           sh(script: """ ${CHANGE_OWNER} """, label: 'change owner')
+          sh(script: """ ${SHOW_STATE} """, label: 'show state')
           sh(script: """ ${RUN_WITH_SYSTEMD}  """, label: 'run with systemd')
         }
       }
