@@ -1,5 +1,5 @@
 #! /bin/bash
-WORKDIR="/var/lib/jenkins/workspace/backend-app-tutor"
+WORKDIR="/var/lib/jenkins/workspace/Backend-nodejs-pipeline"
 APP_NAME="backendapptutor"
 APP_PORT=3000
 PROCESS_NAME="${APP_NAME}.service"
