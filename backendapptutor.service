@@ -1,0 +1,13 @@
+[Unit]
+Description=Backend app tutor project
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/var/lib/jenkins/workspace/backend-app-tutor/
+Restart=on-failure
+ExecStart=/bin/bash systemd_script.sh
+
+[Install]
+WantedBy=multi-user.target
