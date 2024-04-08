@@ -1,13 +1,10 @@
 [Unit]
 Description=Backend app tutor project
-After=network.target
 
 [Service]
 User=root
-Group=root
-WorkingDirectory=/var/lib/jenkins/workspace/Backend-nodejs-pipeline
 Restart=on-failure
-ExecStart=/bin/bash /var/lib/jenkins/workspace/Backend-nodejs-pipeline/systemd_script.sh
+ExecStart=/var/lib/jenkins/workspace/Backend-nodejs-pipeline/systemd_script.sh
 
 [Install]
 WantedBy=multi-user.target

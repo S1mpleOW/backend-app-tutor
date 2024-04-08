@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 APP_NAME="backendapptutor"
 APP_PORT=3000
 PROCESS_NAME="${APP_NAME}.service"
