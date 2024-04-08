@@ -2,7 +2,6 @@
 APP_NAME="backendapptutor"
 APP_PORT=3000
 PROCESS_NAME="${APP_NAME}.service"
-NODE_VERSION=$1
 
 sudo cp "${APP_NAME}.service" /lib/systemd/system/
 sudo chmod +x "/lib/systemd/system/${APP_NAME}.service"
