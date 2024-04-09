@@ -8,8 +8,8 @@ pipeline {
     WORKDIR = "/home/${USER}/${APP_NAME}"
     APP_PORT = 3000
     RUN_WITH_SYSTEMD = '/bin/bash systemd_jenkins.sh'
-    USE_NODE_16 = 'echo v16.20.2 > .nvmrc'
-    USE_NODE_18 = 'echo v18.0.0 > .nvmrc'
+    USE_NODE_16 = "echo v16.20.2 > ${WORKDIR}.nvmrc"
+    USE_NODE_18 = "echo v18.0.0 > ${WORKDIR}.nvmrc"
     CHANGE_OWNER = "chmod 777 -R ${WORKDIR}"
     CHECK_WORKDIR_EXIST = "[ -d ${WORKDIR} ]"
     CREATE_WORKDIR = "mkdir -p ${WORKDIR}"
