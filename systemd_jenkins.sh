@@ -1,5 +1,5 @@
 #!/bin/bash
-APP_NAME="backendapptutor"
+APP_NAME="backend-app-tutor"
 APP_PORT=3000
 NODE_VERSION=16
 PROCESS_NAME="${APP_NAME}.service"
