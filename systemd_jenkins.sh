@@ -11,8 +11,8 @@ fi
 echo "${NODE_VERSION}"
 echo "${PROCESS_NAME}"
 
-sudo cp "${APP_NAME}.service" /lib/systemd/system/
-sudo chmod +x "/lib/systemd/system/${APP_NAME}.service"
+sudo cp "${PROCESS_NAME}" /lib/systemd/system/
+sudo chmod +x "/lib/systemd/system/${PROCESS_NAME}"
 
 sudo systemctl daemon-reload
 

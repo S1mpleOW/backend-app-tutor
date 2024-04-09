@@ -10,7 +10,6 @@ if [ -f ".nvmrc" ]; then
   PROCESS_NAME="${APP_NAME}.node${NODE_VERSION}.service"
 fi
 
-
 echo "${NODE_VERSION}"
 echo "${PROCESS_NAME}"
 
