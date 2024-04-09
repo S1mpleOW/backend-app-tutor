@@ -1,0 +1,10 @@
+[Unit]
+Description=Backend app tutor project with node 18
+
+[Service]
+User=root
+Restart=on-failure
+ExecStart=/var/lib/jenkins/workspace/Backend-nodejs-pipeline-node18/systemd_script.sh
+
+[Install]
+WantedBy=multi-user.target
