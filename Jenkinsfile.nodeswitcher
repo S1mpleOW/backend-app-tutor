@@ -13,7 +13,7 @@ pipeline {
     CHANGE_OWNER = "chmod 777 -R ${WORKDIR}"
     CHECK_WORKDIR_EXIST = "[ -d ${WORKDIR} ]"
     CREATE_WORKDIR = "mkdir -p ${WORKDIR}"
-    CHANGE_WORKDIR = "cp -r * ${WORKDIR}; cp .nvmrc ${WORKDIR}; cd ${WORKDIR}"
+    CHANGE_WORKDIR = "cp -r * ${WORKDIR}; cd ${WORKDIR}"
     SHOW_STATE = 'whoami; ls -la'
     SHOW_HOST_RUNNING = "echo \"Application are running on 0.0.0.0:${APP_PORT}\""
   }
@@ -23,6 +23,11 @@ pipeline {
       steps {
         script {
           try {
+            if (sh(script: """${CHECK_WORKDIR_EXIST} """, returnStatus: true) != 0) {
+              echo "Create new workdir ${WORKDIR}"
+              sh(script: """ ${CREATE_WORKDIR} """, label: "Create new workdir")
+            }
+            sh(script: """ ${CHANGE_WORKDIR}""", label: "Change workdir")
             timeout(time: 5, unit: 'MINUTES') {
               env.useChoice = input message: "Choose node version 16 or 18",
                   parameters: [choice(name: 'Deploy', choices: '16\n18\ncancel', description: 'Choose one')]
@@ -37,11 +42,6 @@ pipeline {
               echo 'Cancel'
             }
             echo "Deploying ${APP_NAME} on port ${APP_PORT}"
-            if (sh(script: """${CHECK_WORKDIR_EXIST} """, returnStatus: true) != 0) {
-              echo "Create new workdir ${WORKDIR}"
-              sh(script: """ ${CREATE_WORKDIR} """, label: "Create new workdir")
-            }
-            sh(script: """ ${CHANGE_WORKDIR}""", label: "Change workdir")
             sh(script: """ ${CHANGE_OWNER} """, label: 'change owner')
             sh(script: """ ${SHOW_STATE} """, label: 'show state')
             sh(script: """ ${RUN_WITH_SYSTEMD}  """, label: 'run with systemd')
