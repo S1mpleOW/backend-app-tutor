@@ -37,11 +37,11 @@ pipeline {
               echo 'Cancel'
             }
             echo "Deploying ${APP_NAME} on port ${APP_PORT}"
-            if (sh(script: "${CHECK_WORKDIR_EXIST}", returnStatus: true) != 0) {
+            if (sh(script: """${CHECK_WORKDIR_EXIST} """, returnStatus: true) != 0) {
               echo "Create new workdir ${WORKDIR}"
-              sh(script: "${CREATE_WORKDIR}", label: "Create new workdir")
+              sh(script: """ ${CREATE_WORKDIR} """, label: "Create new workdir")
             }
-            sh(script: "${CHANGE_WORKDIR}", label: "Change workdir")
+            sh(script: """ ${CHANGE_WORKDIR}""", label: "Change workdir")
             sh(script: """ ${CHANGE_OWNER} """, label: 'change owner')
             sh(script: """ ${SHOW_STATE} """, label: 'show state')
             sh(script: """ ${RUN_WITH_SYSTEMD}  """, label: 'run with systemd')

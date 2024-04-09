@@ -22,11 +22,11 @@ pipeline {
       steps {
         script {
           echo "Deploying ${APP_NAME} on port ${APP_PORT}"
-          if (sh(script: "${CHECK_WORKDIR_EXIST}", returnStatus: true) != 0) {
-            echo "Create new workdir ${WORKDIR}"
-            sh(script: "${CREATE_WORKDIR}", label: "Create new workdir")
-          }
-          sh(script: "${CHANGE_WORKDIR}", label: "Change workdir")
+          if (sh(script: """${CHECK_WORKDIR_EXIST} """, returnStatus: true) != 0) {
+              echo "Create new workdir ${WORKDIR}"
+              sh(script: """ ${CREATE_WORKDIR} """, label: "Create new workdir")
+            }
+          sh(script: """ ${CHANGE_WORKDIR}""", label: "Change workdir")
           sh(script: """ ${USE_NODE_16} """, label: 'use node 16')
           sh(script: """ ${CHANGE_OWNER} """, label: 'change owner')
           sh(script: """ ${SHOW_STATE} """, label: 'show state')
