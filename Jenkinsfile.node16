@@ -15,7 +15,7 @@ pipeline {
     CHANGE_WORKDIR = "cp -r * ${WORKDIR}; cd ${WORKDIR}"
     CHANGE_OWNER = "chmod 777 -R ${WORKDIR}"
     SHOW_STATE = 'whoami; ls -la; pwd'
-    SHOW_NODE_VERSION = 'node -v'
+    SHOW_NVM_VERSION = 'nvm -v;pwd'
     SHOW_HOST_RUNNING = "echo \"Application are running on 0.0.0.0:${APP_PORT}\""
   }
 
@@ -35,7 +35,7 @@ pipeline {
           sh(script: """ ${SHOW_STATE} """, label: 'show state')
           sh(script: """ ${RUN_WITH_SYSTEMD}  """, label: 'run with systemd')
           sh(script: """  ${SHOW_HOST_RUNNING} """, label: 'show log')
-          sh(script: """  ${SHOW_NODE_VERSION} """, label: 'show node version')
+          sh(script: """  ${SHOW_NVM_VERSION} """, label: 'show node version')
         }
       }
     }
