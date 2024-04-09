@@ -10,7 +10,7 @@ pipeline {
     USE_NODE_16 = 'echo v16.20.2 > .nvmrc '
     CHANGE_OWNER = 'chmod 777 *'
     SHOW_STATE = 'whoami; ls -la'
-    SHOW_HOST_RUNNING = "echo "Application are running on 0.0.0.0:${APP_PORT}""
+    SHOW_HOST_RUNNING = "echo \"Application are running on 0.0.0.0:${APP_PORT}\""
   }
 
   stages {
