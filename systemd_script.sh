@@ -17,7 +17,7 @@ install_nvm() {
   if ! [[ -f '~/.profile' ]]; then
     touch ~/.profile && source ~/.profile
   fi
-  nvm current || echo "SSH NVM is being installed" && curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh -o install_nvm.sh && bash install_nvm.sh && source ~/.profile
+  nvm current || echo "SSH NVM is being installed" && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh -o install_nvm.sh && bash install_nvm.sh && source ~/.profile
   echo "checking nvm"
   bash ~/.nvm/nvm.sh;
   nvm --version || exit 1;
