@@ -35,6 +35,7 @@ pipeline {
           sh(script: """ ${SHOW_STATE} """, label: 'show state')
           sh(script: """ ${RUN_WITH_SYSTEMD}  """, label: 'run with systemd')
           sh(script: """  ${SHOW_HOST_RUNNING} """, label: 'show log')
+          sh 'echo $PATH | grep nvm'
           sh 'sudo /bin/bash /root/.nvm/nvm.sh; nvm --version; node --version; npm --version; pwd'
         }
       }
