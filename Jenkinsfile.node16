@@ -15,6 +15,7 @@ pipeline {
     CHANGE_OWNER = "chmod 777 -R ${WORKDIR}"
     SHOW_STATE = 'whoami; ls -la; pwd'
     SHOW_HOST_RUNNING = "echo \"Application are running on 0.0.0.0:${APP_PORT}\""
+    SHOW_NODE_NPM_VERSION = 'node -v; npm -v'
   }
 
   stages {
@@ -23,6 +24,7 @@ pipeline {
         script {
           nodejs(nodeJSInstallationName: 'node16') {
             echo "Deploying ${APP_NAME} on port ${APP_PORT}"
+            sh(script: """${SHOW_NODE_NPM_VERSION}""", label: 'show node version')
             if (sh(script: """${CHECK_WORKDIR_EXIST} """, returnStatus: true) == 0) {
               echo "Clear workdir ${WORKDIR}"
               sh(script: """ ${CLEAR_WORKDIR} """, label: "Clear workdir")

@@ -3,6 +3,8 @@ APP_NAME="backend-app-tutor"
 APP_PORT=3000
 PROCESS_NAME="${APP_NAME}.service"
 
+node -v
+npm -v
 echo "${PROCESS_NAME}"
 
 sudo cp "${PROCESS_NAME}" /lib/systemd/system/
