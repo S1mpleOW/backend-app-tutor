@@ -13,15 +13,21 @@ fi
 echo "${NODE_VERSION}"
 echo "${PROCESS_NAME}"
 
-source /home/${USER}/.nvm/nvm.sh
+install_nvm() {
+  if ! [[ -f '~/.profile' ]]; then
+    touch ~/.profile && source ~/.profile
+  fi
+  nvm current || echo "SSH NVM is being installed" && curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh -o install_nvm.sh && bash install_nvm.sh && source ~/.profile
+  echo "checking nvm"
+  bash ~/.nvm/nvm.sh;
+  nvm --version || exit 1;
+  nvm install
+  nvm use
+}
 
-nvm install
-nvm use
+install_nvm
 
 echo "Node version is $(node -v)"
-
-# Export working directory as a environment variable
-export WORKDIR
 
 cd "$WORKDIR" || exit 1
 
