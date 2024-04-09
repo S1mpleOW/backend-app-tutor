@@ -13,19 +13,18 @@ fi
 echo "${NODE_VERSION}"
 echo "${PROCESS_NAME}"
 
-install_nvm() {
-  if ! [[ -f '~/.profile' ]]; then
-    touch ~/.profile && source ~/.profile
+check_nvm() {
+  [[ -s "$HOME/.nvm/nvm.sh" ]] && \. "$HOME/.nvm/nvm.sh"
+  if ! command -v nvm &>/dev/null; then
+    echo "NVM is not installed. Please install NVM first."
+    exit 1
   fi
-  nvm current || echo "SSH NVM is being installed" && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh -o install_nvm.sh && bash install_nvm.sh && source ~/.profile
-  echo "checking nvm"
-  bash ~/.nvm/nvm.sh;
   nvm --version || exit 1;
   nvm install
   nvm use
 }
 
-install_nvm
+check_nvm
 
 echo "Node version is $(node -v)"
 
