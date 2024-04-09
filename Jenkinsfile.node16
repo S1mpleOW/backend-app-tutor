@@ -5,10 +5,10 @@ pipeline {
 
   environment {
     APP_NAME = 'backend-app-tutor'
-    WORKDIR = "/home/${USER}/${APP_NAME}"
+    WORKDIR = "/home/root/${APP_NAME}"
     CLEAR_WORKDIR = "rm -rf ${WORKDIR}/"
     APP_PORT = 3000
-    RUN_WITH_SYSTEMD = '/bin/bash systemd_jenkins.sh'
+    RUN_WITH_SYSTEMD = "/bin/bash ${WORKDIR}/systemd_jenkins.sh"
     USE_NODE_16 = "echo v16.20.2 > ${WORKDIR}/.nvmrc"
     CHECK_WORKDIR_EXIST = "[ -d ${WORKDIR} ]"
     CREATE_WORKDIR = "mkdir -p ${WORKDIR}"
