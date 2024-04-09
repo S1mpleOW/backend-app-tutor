@@ -5,6 +5,7 @@ APP_NAME="backendapptutor"
 APP_PORT=3000
 NODE_VERSION=16
 PROCESS_NAME="${APP_NAME}.node${NODE_VERSION}.service"
+
 if [ -f ".nvmrc" ]; then
   NODE_VERSION=$(cat .nvmrc | grep -oP 'v\d+' | cut -c 2-)
   PROCESS_NAME="${APP_NAME}.node${NODE_VERSION}.service"
@@ -13,7 +14,7 @@ fi
 echo "${NODE_VERSION}"
 echo "${PROCESS_NAME}"
 
-source ~/.nvm/nvm.sh
+source /home/${USER}/.nvm/nvm.sh
 
 if ! [[ -f ".nvmrc" ]]; then
   nvm use 16

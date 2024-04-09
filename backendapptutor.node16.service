@@ -2,7 +2,7 @@
 Description=Backend app tutor project with node 16
 
 [Service]
-User=root
+User=s1mpleow
 Restart=on-failure
 ExecStart=/var/lib/jenkins/workspace/Backend-nodejs-pipeline-node16/systemd_script.sh
 
