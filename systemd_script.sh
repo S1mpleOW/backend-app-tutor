@@ -3,41 +3,11 @@
 APP_NAME="backend-app-tutor"
 WORKDIR="/home/root/${APP_NAME}"
 APP_PORT=3000
-NODE_VERSION=16
-PROCESS_NAME="${APP_NAME}.service"
-
-
-echo "${PROCESS_NAME}"
 
 cd "$WORKDIR"
 pwd
 
-check_nvm() {
-  [[ -s "$HOME/.nvm/nvm.sh" ]] && \. "$HOME/.nvm/nvm.sh"
-  if ! command -v nvm &>/dev/null; then
-    echo "NVM is not installed. Please install NVM first."
-    exit 1
-  fi
-  if ! [ -f ".nvmrc" ]; then
-    echo "No .nvmrc file found. Please create one."
-    exit 1
-  fi
-
-  if [ -f ".nvmrc" ]; then
-    NODE_VERSION=$(cat .nvmrc | grep -oP 'v\d+' | cut -c 2-)
-  fi
-
-  echo "Pipeline are using node ${NODE_VERSION}"
-  cat .nvmrc
-  nvm --version || exit 1
-  nvm install
-  nvm use
-}
-
-check_nvm
-
 echo "Node version is $(node -v)"
-
 
 if [[ -f package-lock.json ]]; then
   npm ci
