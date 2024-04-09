@@ -1,7 +1,7 @@
 #!/bin/bash
 
 APP_NAME="backend-app-tutor"
-WORKDIR="/home/${USER}/${APP_NAME}"
+WORKDIR="/home/root/${APP_NAME}"
 APP_PORT=3000
 NODE_VERSION=16
 PROCESS_NAME="${APP_NAME}.service"
