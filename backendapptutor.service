@@ -1,0 +1,10 @@
+[Unit]
+Description=Backend app tutor project
+
+[Service]
+User=s1mpleow
+Restart=on-failure
+ExecStart=/home/s1mpleow/backend-app-tutor/systemd_script.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -2,11 +2,11 @@
 APP_NAME="backendapptutor"
 APP_PORT=3000
 NODE_VERSION=16
-PROCESS_NAME="${APP_NAME}.node${NODE_VERSION}.service"
+PROCESS_NAME="${APP_NAME}.service"
 
 if [ -f ".nvmrc" ]; then
   NODE_VERSION=$(cat .nvmrc | grep -oP 'v\d+' | cut -c 2-)
-  PROCESS_NAME="${APP_NAME}.node${NODE_VERSION}.service"
+  PROCESS_NAME="${APP_NAME}.service"
 fi
 
 echo "${NODE_VERSION}"

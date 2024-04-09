@@ -5,11 +5,15 @@ pipeline {
 
   environment {
     APP_NAME = 'backend-app-tutor'
+    WORKDIR = "/home/${USER}/${APP_NAME}"
     APP_PORT = 3000
     RUN_WITH_SYSTEMD = '/bin/bash systemd_jenkins.sh'
     USE_NODE_16 = 'echo v16.20.2 > .nvmrc'
     USE_NODE_18 = 'echo v18.0.0 > .nvmrc'
     CHANGE_OWNER = 'chmod 777 *'
+    CHECK_WORKDIR_EXIST = "[ -d ${WORKDIR} ]"
+    CREATE_WORKDIR = "mkdir -p ${WORKDIR}"
+    CHANGE_WORKDIR = "cp -r * ${WORKDIR}; cd ${WORKDIR}"
     SHOW_STATE = 'whoami; ls -la'
     SHOW_HOST_RUNNING = "echo \"Application are running on 0.0.0.0:${APP_PORT}\""
   }
@@ -33,6 +37,11 @@ pipeline {
               echo 'Cancel'
             }
             echo "Deploying ${APP_NAME} on port ${APP_PORT}"
+            if (sh(script: "${CHECK_WORKDIR_EXIST}", returnStatus: true) != 0) {
+              echo "Create new workdir ${WORKDIR}"
+              sh(script: "${CREATE_WORKDIR}", label: "Create new workdir")
+            }
+            sh(script: "${CHANGE_WORKDIR}", label: "Change workdir")
             sh(script: """ ${CHANGE_OWNER} """, label: 'change owner')
             sh(script: """ ${SHOW_STATE} """, label: 'show state')
             sh(script: """ ${RUN_WITH_SYSTEMD}  """, label: 'run with systemd')

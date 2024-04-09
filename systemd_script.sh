@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WORKDIR=$(dirname "$(realpath "$0")")
+WORKDIR="/home/${USER}/backendapptutor"
 APP_NAME="backendapptutor"
 APP_PORT=3000
 NODE_VERSION=16
