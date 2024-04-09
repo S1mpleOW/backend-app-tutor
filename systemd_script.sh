@@ -19,6 +19,11 @@ check_nvm() {
     echo "NVM is not installed. Please install NVM first."
     exit 1
   fi
+  if ! [[ -f '.nvmrc']]; then
+    echo "No .nvmrc file found. Please create one."
+    exit 1
+  fi
+  cat .nvmrc
   nvm --version || exit 1;
   nvm install
   nvm use
