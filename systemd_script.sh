@@ -16,11 +16,8 @@ echo "${PROCESS_NAME}"
 
 source /home/${USER}/.nvm/nvm.sh
 
-if ! [[ -f ".nvmrc" ]]; then
-  nvm use 16
-else
-  nvm use
-fi
+nvm install
+nvm use
 
 echo "Node version is $(node -v)"
 
