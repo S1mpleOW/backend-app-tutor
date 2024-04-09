@@ -11,7 +11,7 @@ pipeline {
     USE_NODE_18 = 'echo v18.0.0 > .nvmrc'
     CHECK_WORKDIR_EXIST = "[ -d ${WORKDIR} ]"
     CREATE_WORKDIR = "mkdir -p ${WORKDIR}"
-    CHANGE_WORKDIR = "cp -r * ${WORKDIR}; cd ${WORKDIR}"
+    CHANGE_WORKDIR = "cp -r * ${WORKDIR}; cp .nvmrc ${WORKDIR}; cd ${WORKDIR}"
     CHANGE_OWNER = "chmod 777 -R ${WORKDIR}"
     SHOW_STATE = 'whoami; ls -la'
     SHOW_HOST_RUNNING = "echo \"Application are running on 0.0.0.0:${APP_PORT}\""
