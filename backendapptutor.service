@@ -4,6 +4,7 @@ Description=Backend app tutor project
 [Service]
 User=root
 Restart=on-failure
+StartLimitBurst=100
 ExecStart=/home/root/backend-app-tutor/systemd_script.sh
 
 [Install]
