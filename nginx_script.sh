@@ -24,4 +24,4 @@ if ! [[ -f .env ]]; then
 fi
 
 npm run up:dev
-pm2 start npm --name "backendapptutor" – start:dev
+pm2 start npm --name "backendapptutor" -- run start:dev
