@@ -1,13 +1,17 @@
 #!/bin/bash
 
 APP_NAME="backend-app-tutor"
-WORKDIR="/home/root/${APP_NAME}"
 APP_PORT=3000
 
-cd "$WORKDIR"
-pwd
+show_state() {
+  echo "Node version: $(node -v)"
+  echo "NPM version: $(npm -v)"
+  echo "App name: ${APP_NAME}"
+  echo "App port: ${APP_PORT}"
+  echo "Working directory: ${pwd}"
+}
 
-echo "Node version is $(node -v)"
+show_state
 
 if [[ -f package-lock.json ]]; then
   npm ci
