@@ -8,7 +8,7 @@ show_state() {
   echo "NPM version: $(npm -v)"
   echo "App name: ${APP_NAME}"
   echo "App port: ${APP_PORT}"
-  echo "Working directory: ${pwd}"
+  echo "Working directory: $(pwd)"
 }
 
 show_state
@@ -26,3 +26,5 @@ fi
 npm run up:dev
 
 pm2 start npm --name "backendapptutor" -- run "start:dev"
+sleep 10
+pm2 status

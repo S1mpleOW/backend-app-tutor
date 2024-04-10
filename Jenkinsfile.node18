@@ -5,37 +5,28 @@ pipeline {
 
   environment {
     APP_NAME = 'backend-app-tutor'
-    WORKDIR = "/home/${USER}/${APP_NAME}"
-    CLEAR_WORKDIR = "rm -rf ${WORKDIR}/"
     APP_PORT = 3000
-    RUN_WITH_SYSTEMD = "/bin/bash ${WORKDIR}/systemd_jenkins.sh"
-    USE_NODE_18 = "echo v18.0.0 > ${WORKDIR}/.nvmrc"
-    CHECK_WORKDIR_EXIST = "[ -d ${WORKDIR} ]"
-    CREATE_WORKDIR = "mkdir -p ${WORKDIR}"
-    CHANGE_WORKDIR = "cp -r * ${WORKDIR}; cd ${WORKDIR}"
-    CHANGE_OWNER = "chmod 777 -R ${WORKDIR}"
-    SHOW_STATE = 'whoami; ls -la'
-    SHOW_NVM_VERSION = 'nvm -v'
+    RUN_WITH_NGINX = "/bin/bash nginx_script.sh"
+    GRANT_PERMISSION = "chmod 777 -R ."
+    SHOW_STATE = 'whoami; ls -la; pwd'
     SHOW_HOST_RUNNING = "echo \"Application are running on 0.0.0.0:${APP_PORT}\""
+    SHOW_NODE_NPM_VERSION = 'node -v; npm -v'
+    SHOW_PM2_STATUS = 'pm2 status'
   }
 
   stages {
     stage('Deploy with node 18 in systemd') {
       steps {
         script {
-          echo "Deploying ${APP_NAME} on port ${APP_PORT}"
-          if (sh(script: """${CHECK_WORKDIR_EXIST} """, returnStatus: true) == 0) {
-            echo "Clear workdir ${WORKDIR}"
-            sh(script: """ ${CLEAR_WORKDIR} """, label: "Clear workdir")
+          nodejs(nodeJSInstallationName: 'node18') {
+            echo "Deploying ${APP_NAME} on port ${APP_PORT}"
+            sh(script: """${SHOW_NODE_NPM_VERSION}""", label: 'show node version')
+            sh(script: """${GRANT_PERMISSION}""", label: 'grant permission')
+            sh(script: """ ${SHOW_STATE} """, label: 'show state')
+            sh(script: """ ${RUN_WITH_NGINX}  """, label: 'run with systemd')
+            sh(script: """  ${SHOW_HOST_RUNNING} """, label: 'show log')
+            sh(script: """ ${SHOW_PM2_STATUS} """, label: 'show pm2 status')
           }
-          sh(script: """ ${CREATE_WORKDIR} """, label: "Create new workdir")
-          sh(script: """ ${CHANGE_WORKDIR}""", label: "Change workdir")
-          sh(script: """ ${USE_NODE_18} """, label: 'use node 18')
-          sh(script: """ ${CHANGE_OWNER} """, label: 'change owner')
-          sh(script: """ ${SHOW_STATE} """, label: 'show state')
-          sh(script: """ ${RUN_WITH_SYSTEMD}  """, label: 'run with systemd')
-          sh(script: """  ${SHOW_HOST_RUNNING} """, label: 'show log')
-          sh(script: """  ${SHOW_NVM_VERSION} """, label: 'show node version')
         }
       }
     }
