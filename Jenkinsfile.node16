@@ -12,6 +12,7 @@ pipeline {
     SHOW_HOST_RUNNING = "echo \"Application are running on 0.0.0.0:${APP_PORT}\""
     SHOW_NODE_NPM_VERSION = 'node -v; npm -v'
     SHOW_PM2_STATUS = 'pm2 status'
+    SHOW_PM2_LOGS = "pm2 logs ${APP_NAME}"
   }
 
   stages {
@@ -26,6 +27,7 @@ pipeline {
             sh(script: """ ${RUN_WITH_NGINX}  """, label: 'run with systemd')
             sh(script: """  ${SHOW_HOST_RUNNING} """, label: 'show log')
             sh(script: """ ${SHOW_PM2_STATUS} """, label: 'show pm2 status')
+            sh(script: """ ${SHOW_PM2_LOGS} """, label: 'show pm2 logs')
           }
         }
       }

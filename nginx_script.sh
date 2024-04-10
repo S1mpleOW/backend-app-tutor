@@ -25,6 +25,6 @@ fi
 
 npm run up:dev
 
-pm2 start npm --name "backendapptutor" -- run "start:dev"
+pm2 start npm --name "${APP_NAME}" -- run "start:dev"
 sleep 10
 pm2 status
