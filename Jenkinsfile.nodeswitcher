@@ -5,47 +5,56 @@ pipeline {
 
   environment {
     APP_NAME = 'backend-app-tutor'
-    WORKDIR = "/home/${USER}/${APP_NAME}"
     APP_PORT = 3000
-    RUN_WITH_SYSTEMD = '/bin/bash systemd_jenkins.sh'
-    USE_NODE_16 = "echo v16.20.2 > ${WORKDIR}.nvmrc"
-    USE_NODE_18 = "echo v18.0.0 > ${WORKDIR}.nvmrc"
-    CHANGE_OWNER = "chmod 777 -R ${WORKDIR}"
-    CHECK_WORKDIR_EXIST = "[ -d ${WORKDIR} ]"
-    CREATE_WORKDIR = "mkdir -p ${WORKDIR}"
-    CHANGE_WORKDIR = "cp -r * ${WORKDIR}; cd ${WORKDIR}"
-    SHOW_STATE = 'whoami; ls -la'
+    RUN_WITH_NGINX = "/bin/bash nginx_script.sh"
+    GRANT_PERMISSION = "chmod 777 -R ."
+    SHOW_STATE = 'whoami; ls -la; pwd'
     SHOW_HOST_RUNNING = "echo \"Application are running on 0.0.0.0:${APP_PORT}\""
+    SHOW_NODE_NPM_VERSION = 'node -v; npm -v'
+    SHOW_PM2_STATUS = 'pm2 status'
+    SAVE_PM2_LOGS = "pm2 logs ${APP_NAME} > nohup.out 2>&1 &"
+    SHOW_PM2_LOGS = 'cat nohup.out'
   }
 
   stages {
-    stage('Deploy with node 16 in systemd') {
+    stage('Deploy with nodejs switch in nginx') {
       steps {
         script {
           try {
-            if (sh(script: """${CHECK_WORKDIR_EXIST} """, returnStatus: true) != 0) {
-              echo "Create new workdir ${WORKDIR}"
-              sh(script: """ ${CREATE_WORKDIR} """, label: "Create new workdir")
-            }
-            sh(script: """ ${CHANGE_WORKDIR}""", label: "Change workdir")
             timeout(time: 5, unit: 'MINUTES') {
               env.useChoice = input message: "Choose node version 16 or 18",
                   parameters: [choice(name: 'Deploy', choices: '16\n18\ncancel', description: 'Choose one')]
             }
+            echo "Deploying ${APP_NAME} on port ${APP_PORT}"
             if(env.useChoice == '16') {
-              echo 'Deploy with node 16'
-              sh(script: """ ${USE_NODE_16} """, label: 'use node 16')
-            } else if(env.useChoice == '18') {
-              echo 'Deploy with node 18'
-              sh(script: """ ${USE_NODE_18} """, label: 'use node 18')
-            } else {
+              nodejs(nodeJSInstallationName: 'node16') {
+                echo "Deploying ${APP_NAME} on port ${APP_PORT}"
+                sh(script: """${SHOW_NODE_NPM_VERSION}""", label: 'show node version')
+                sh(script: """${GRANT_PERMISSION}""", label: 'grant permission')
+                sh(script: """ ${SHOW_STATE} """, label: 'show state')
+                sh(script: """ ${RUN_WITH_NGINX}  """, label: 'run with systemd')
+                sh(script: """  ${SHOW_HOST_RUNNING} """, label: 'show log')
+                sh(script: """ ${SHOW_PM2_STATUS} """, label: 'show pm2 status')
+                sh(script: """ ${SAVE_PM2_LOGS} """, label: 'save pm2 logs')
+                sh(script: """ ${SHOW_PM2_LOGS} """, label: 'show pm2 logs')
+              }
+            }
+            else if(env.useChoice == '18') {
+              nodejs(nodeJSInstallationName: 'node18') {
+                echo "Deploying ${APP_NAME} on port ${APP_PORT}"
+                sh(script: """${SHOW_NODE_NPM_VERSION}""", label: 'show node version')
+                sh(script: """${GRANT_PERMISSION}""", label: 'grant permission')
+                sh(script: """ ${SHOW_STATE} """, label: 'show state')
+                sh(script: """ ${RUN_WITH_NGINX}  """, label: 'run with systemd')
+                sh(script: """  ${SHOW_HOST_RUNNING} """, label: 'show log')
+                sh(script: """ ${SHOW_PM2_STATUS} """, label: 'show pm2 status')
+                sh(script: """ ${SAVE_PM2_LOGS} """, label: 'save pm2 logs')
+                sh(script: """ ${SHOW_PM2_LOGS} """, label: 'show pm2 logs')
+              }
+            }
+            else {
               echo 'Cancel'
             }
-            echo "Deploying ${APP_NAME} on port ${APP_PORT}"
-            sh(script: """ ${CHANGE_OWNER} """, label: 'change owner')
-            sh(script: """ ${SHOW_STATE} """, label: 'show state')
-            sh(script: """ ${RUN_WITH_SYSTEMD}  """, label: 'run with systemd')
-            sh(script: """  ${SHOW_HOST_RUNNING} """, label: 'show log')
           } catch (Exception e) {
             echo 'Error: ${e}'
           }
