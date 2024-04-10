@@ -24,4 +24,12 @@ if ! [[ -f .env ]]; then
 fi
 
 npm run up:dev
+
 pm2 start npm --name "backendapptutor" -- run "start:dev"
+
+sleep 10
+
+pm2 status
+pm2 ls -m
+
+pm2 logs > log-pm2.out
