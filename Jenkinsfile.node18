@@ -12,10 +12,12 @@ pipeline {
     SHOW_HOST_RUNNING = "echo \"Application are running on 0.0.0.0:${APP_PORT}\""
     SHOW_NODE_NPM_VERSION = 'node -v; npm -v'
     SHOW_PM2_STATUS = 'pm2 status'
+    SAVE_PM2_LOGS = "pm2 logs backend-app-tutor > nohup.out 2>&1 &"
+    SHOW_PM2_LOGS = 'cat nohup.out'
   }
 
   stages {
-    stage('Deploy with node 18 in systemd') {
+    stage('Deploy with node 16 in systemd') {
       steps {
         script {
           nodejs(nodeJSInstallationName: 'node18') {
@@ -26,6 +28,8 @@ pipeline {
             sh(script: """ ${RUN_WITH_NGINX}  """, label: 'run with systemd')
             sh(script: """  ${SHOW_HOST_RUNNING} """, label: 'show log')
             sh(script: """ ${SHOW_PM2_STATUS} """, label: 'show pm2 status')
+            sh(script: """ ${SAVE_PM2_LOGS} """, label: 'save pm2 logs')
+            sh(script: """ ${SHOW_PM2_LOGS} """, label: 'show pm2 logs')
           }
         }
       }
