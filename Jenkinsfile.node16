@@ -27,7 +27,7 @@ pipeline {
             sh(script: """ ${RUN_WITH_NGINX}  """, label: 'run with systemd')
             sh(script: """  ${SHOW_HOST_RUNNING} """, label: 'show log')
             sh(script: """ ${SHOW_PM2_STATUS} """, label: 'show pm2 status')
-            sh(script: """ ${SHOW_PM2_LOGS} """, label: 'show pm2 logs --lines 100')
+            sh(script: """ ${SHOW_PM2_LOGS} """, label: 'show pm2 logs --lines 100 > pm2-log.out')
           }
         }
       }
