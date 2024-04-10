@@ -12,7 +12,7 @@ pipeline {
     SHOW_HOST_RUNNING = "echo \"Application are running on 0.0.0.0:${APP_PORT}\""
     SHOW_NODE_NPM_VERSION = 'node -v; npm -v'
     SHOW_PM2_STATUS = 'pm2 status'
-    SAVE_PM2_LOGS = "pm2 logs backend-app-tutor > nohup.out 2>&1 & | cat nohup.out"
+    SAVE_PM2_LOGS = "pm2 logs backend-app-tutor > nohup.out 2>&1 &"
     SHOW_PM2_LOGS = 'cat nohup.out'
   }
 
